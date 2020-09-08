@@ -26,6 +26,7 @@ module.exports = {
     semi: 'off',
     'object-curly-newline': 'off',
     'react/react-in-jsx-scope': 'off',
+    'implicit-arrow-linebreak': 'off',
   },
   overrides: [
     {

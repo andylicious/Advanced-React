@@ -1,5 +1,5 @@
-import React from "react";
-import Head from "next/head";
+import React from 'react'
+import Head from 'next/head'
 
 export default function Meta() {
   return (
@@ -10,5 +10,5 @@ export default function Meta() {
       <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
       <title>Sick Fits!</title>
     </Head>
-  );
+  )
 }

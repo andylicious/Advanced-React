@@ -3,5 +3,5 @@ export default function Sell() {
     <div>
       <p>Sell!</p>
     </div>
-  );
+  )
 }

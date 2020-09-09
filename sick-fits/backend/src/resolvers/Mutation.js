@@ -1,3 +1,15 @@
-const mutations = {}
+const Mutations = {
+  async createItem(parent, args, context, info) {
+    // TODO: Check if logged in
+    const item = await context.db.mutation.createItem(
+      {
+        data: { ...args },
+      },
+      info
+    )
 
-module.exports = mutations
+    return item
+  },
+}
+
+module.exports = Mutations

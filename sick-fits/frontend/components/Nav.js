@@ -7,7 +7,7 @@ export default function Nav() {
   return (
     <StyledNav>
       <Link href="/">
-        <a>Home</a>
+        <a>Shop</a>
       </Link>
       <Link href="/sell">
         <a>Sell</a>

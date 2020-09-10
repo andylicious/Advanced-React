@@ -1,7 +1,9 @@
+import Items from '../components/Items'
+
 export default function Home() {
   return (
     <div>
-      <p>Home</p>
+      <Items />
     </div>
   )
 }

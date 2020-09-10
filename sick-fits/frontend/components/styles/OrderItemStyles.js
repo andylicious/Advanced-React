@@ -1,12 +1,12 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 const OrderItemStyles = styled.li`
-  box-shadow: ${props => props.theme.bs};
+  box-shadow: ${(props) => props.theme.bs};
   list-style: none;
   padding: 2rem;
-  border: 1px solid ${props => props.theme.offWhite};
+  border: 1px solid ${(props) => props.theme.offWhite};
   h2 {
-    border-bottom: 2px solid red;
+    border-bottom: 2px solid ${(props) => props.theme.blue};
     margin-top: 0;
     margin-bottom: 2rem;
     padding-bottom: 2rem;
@@ -39,6 +39,6 @@ const OrderItemStyles = styled.li`
       margin-bottom: 1rem;
     }
   }
-`;
+`
 
-export default OrderItemStyles;
+export default OrderItemStyles

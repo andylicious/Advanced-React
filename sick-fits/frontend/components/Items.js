@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import Item from './Item'
 
 // Recommendation to locate query where it is used from apollo
-const GET_ALL_ITEMS_QUERY = gql`
+export const GET_ALL_ITEMS_QUERY = gql`
   query GET_ALL_ITEMS_QUERY {
     items {
       id

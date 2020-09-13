@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { ThemeProvider, injectGlobal } from 'styled-components'
+import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
 
 import Header from './Header'
 import Meta from './Meta'
@@ -25,7 +25,7 @@ const Inner = styled.div`
   margin: 0 auto;
 `
 // eslint-disable-next-line no-unused-expressions
-injectGlobal`
+const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: 'radnika_next';
     src: url('/static/radnikanext-medium-webfont.woff2');
@@ -56,6 +56,7 @@ injectGlobal`
 export default function Page({ children }) {
   return (
     <ThemeProvider theme={theme}>
+      <GlobalStyle />
       <StyledPage>
         <Inner>
           <Meta />

@@ -38,9 +38,11 @@ const initialState = {
 const CreateItem = () => {
   const [state, setState] = useState(initialState)
 
+  const handlePriceChange = (val) => (val ? parseFloat(val) : val)
+
   const handleChange = (e) => {
     const { name, type, value } = e.target
-    const val = type === 'number' ? parseFloat(value) : value
+    const val = type === 'number' ? handlePriceChange(value) : value
 
     setState({ ...state, [name]: val })
   }
@@ -57,6 +59,30 @@ const CreateItem = () => {
     })
   }
 
+  const uploadFile = async (e) => {
+    const { files } = e.target
+    const data = new FormData()
+    data.append('file', files[0])
+    data.append('upload_preset', 'sickfits')
+
+    const res = await fetch(
+      'https://api.cloudinary.com/v1_1/dcrzhlcbu/image/upload',
+      {
+        method: 'POST',
+        body: data,
+      }
+    )
+
+    const file = await res.json()
+    console.log('file', { file })
+
+    setState({
+      ...state,
+      image: file.secure_url,
+      largeImage: file.eager[0].secure_url,
+    })
+  }
+
   return (
     <Mutation mutation={CREATE_ITEM_MUTATION} variables={state}>
       {(createItem, { loading, error }) => (
@@ -64,6 +90,19 @@ const CreateItem = () => {
           <Error error={error} />
 
           <fieldset disabled={loading} aria-busy={loading}>
+            <label htmlFor="file">
+              Image
+              <input
+                type="file"
+                id="file"
+                name="file"
+                onChange={uploadFile}
+                placeholder="Upload image"
+                required
+              />
+              {state.image && <img src={state.image} alt="upload preview" />}
+            </label>
+
             <label htmlFor="title">
               Title
               <input

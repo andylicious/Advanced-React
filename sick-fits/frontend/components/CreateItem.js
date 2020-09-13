@@ -51,7 +51,6 @@ const CreateItem = () => {
     e.preventDefault()
 
     const res = await createItem(state)
-    console.log('res', { res })
 
     Router.push({
       pathname: '/item',
@@ -74,7 +73,6 @@ const CreateItem = () => {
     )
 
     const file = await res.json()
-    console.log('file', { file })
 
     setState({
       ...state,

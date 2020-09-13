@@ -10,6 +10,18 @@ const Mutations = {
 
     return item
   },
+
+  async updateItem(parent, args, context, info) {
+    const updates = { ...args }
+    delete updates.id
+    return context.db.mutation.updateItem(
+      {
+        data: { ...updates },
+        where: { id: args.id },
+      },
+      info
+    )
+  },
 }
 
 module.exports = Mutations

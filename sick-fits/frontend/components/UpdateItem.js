@@ -1,41 +1,13 @@
 import React, { useState } from 'react'
 import { Mutation, Query } from 'react-apollo'
-import gql from 'graphql-tag'
 import Router from 'next/router'
 import PropTypes from 'prop-types'
 
 import Form from './styles/Form'
-import formatMoney from '../lib/formatMoney'
 import Error from './ErrorMessage'
+import { GET_ITEM } from './graphql/queries'
+import { UPDATE_ITEM_MUTATION } from './graphql/mutations'
 
-export const UPDATE_ITEM_MUTATION = gql`
-  mutation UPDATE_ITEM_MUTATION(
-    $id: ID!
-    $title: String
-    $description: String
-    $price: Int
-  ) {
-    updateItem(
-      id: $id
-      title: $title
-      description: $description
-      price: $price
-    ) {
-      id
-    }
-  }
-`
-
-export const GET_ITEM = gql`
-  query GET_ITEM($id: ID!) {
-    item(where: { id: $id }) {
-      id
-      title
-      description
-      price
-    }
-  }
-`
 const UpdateItem = ({ id }) => {
   const [state, setState] = useState({})
 

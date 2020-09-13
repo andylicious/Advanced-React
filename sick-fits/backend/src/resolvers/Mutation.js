@@ -22,6 +22,15 @@ const Mutations = {
       info
     )
   },
+
+  async deleteItem(parent, args, context, info) {
+    const where = { id: args.id }
+    // 1. Find item
+    const item = await context.db.query.item({ where }, `{ id title }`)
+    // 2. Check if they own and have permissions
+    // 3. Delete it
+    return context.db.mutation.deleteItem({ where }, info)
+  },
 }
 
 module.exports = Mutations

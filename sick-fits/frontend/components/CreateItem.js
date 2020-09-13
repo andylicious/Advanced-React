@@ -1,31 +1,10 @@
 import React, { useState } from 'react'
 import { Mutation } from 'react-apollo'
-import gql from 'graphql-tag'
 import Router from 'next/router'
 
 import Form from './styles/Form'
-import formatMoney from '../lib/formatMoney'
 import Error from './ErrorMessage'
-
-export const CREATE_ITEM_MUTATION = gql`
-  mutation CREATE_ITEM_MUTATION(
-    $title: String!
-    $description: String!
-    $price: Int!
-    $image: String
-    $largeImage: String
-  ) {
-    createItem(
-      title: $title
-      description: $description
-      price: $price
-      image: $image
-      largeImage: $largeImage
-    ) {
-      id
-    }
-  }
-`
+import { CREATE_ITEM_MUTATION } from './graphql/mutations'
 
 const initialState = {
   title: '',
@@ -58,6 +37,7 @@ const CreateItem = () => {
     })
   }
 
+  // TODO: Stop uploaded image to clear state when finished loading
   const uploadFile = async (e) => {
     const { files } = e.target
     const data = new FormData()

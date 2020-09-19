@@ -23,3 +23,26 @@ export const GET_ITEM = gql`
     }
   }
 `
+
+export const GET_SINGLE_ITEM_QUERY = gql`
+  query GET_SINGLE_ITEM_QUERY($id: ID!) {
+    item(where: { id: $id }) {
+      description
+      id
+      image
+      largeImage
+      price
+      title
+    }
+  }
+`
+
+export const PAGINATION_QUERY = gql`
+  query PAGINATION_QUERY {
+    itemsConnection {
+      aggregate {
+        count
+      }
+    }
+  }
+`

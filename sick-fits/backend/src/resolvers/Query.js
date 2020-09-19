@@ -8,6 +8,7 @@ const Query = {
   // ABOVE IS EQUAL TO BELOW
   items: forwardTo('db'),
   item: forwardTo('db'),
+  itemsConnection: forwardTo('db'),
 }
 
 module.exports = Query

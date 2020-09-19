@@ -1,9 +1,11 @@
 import React from 'react'
 import { Query } from 'react-apollo'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
 import Item from './Item'
 import { GET_ALL_ITEMS_QUERY } from './graphql/queries'
+import Pagination from './Pagination'
 
 const Center = styled.div`
   text-align: center;
@@ -20,30 +22,33 @@ const ItemsList = styled.div`
   }
 `
 
-const Items = () => {
-  console.log('rerenderin')
-  return (
-    <div>
-      <p>Items!</p>
-      <Center>
-        <Query query={GET_ALL_ITEMS_QUERY}>
-          {({ data, error, loading }) => {
-            if (loading) return <p>Loading...</p>
+const Items = ({ page }) => (
+  <div>
+    <p>Items!</p>
+    <Center>
+      <Pagination page={page} />
+      <Query query={GET_ALL_ITEMS_QUERY}>
+        {({ data, error, loading }) => {
+          if (loading) return <p>Loading...</p>
 
-            if (error) return <p>Error: {error.message}!</p>
+          if (error) return <p>Error: {error.message}!</p>
 
-            return (
-              <ItemsList>
-                {data.items.map((item) => (
-                  <Item item={item} key={item.id} />
-                ))}
-              </ItemsList>
-            )
-          }}
-        </Query>
-      </Center>
-    </div>
-  )
+          return (
+            <ItemsList>
+              {data.items.map((item) => (
+                <Item item={item} key={item.id} />
+              ))}
+            </ItemsList>
+          )
+        }}
+      </Query>
+      <Pagination />
+    </Center>
+  </div>
+)
+
+Items.propTypes = {
+  page: PropTypes.number,
 }
 
 export default Items

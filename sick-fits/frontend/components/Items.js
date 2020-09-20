@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import Item from './Item'
 import { GET_ALL_ITEMS_QUERY } from './graphql/queries'
 import Pagination from './Pagination'
+import { perPage } from '../config'
 
 const Center = styled.div`
   text-align: center;
@@ -27,7 +28,10 @@ const Items = ({ page }) => (
     <p>Items!</p>
     <Center>
       <Pagination page={page} />
-      <Query query={GET_ALL_ITEMS_QUERY}>
+      <Query
+        query={GET_ALL_ITEMS_QUERY}
+        variables={{ first: perPage, skip: page * perPage - perPage }}
+      >
         {({ data, error, loading }) => {
           if (loading) return <p>Loading...</p>
 
@@ -42,7 +46,7 @@ const Items = ({ page }) => (
           )
         }}
       </Query>
-      <Pagination />
+      <Pagination page={page} />
     </Center>
   </div>
 )

@@ -39,7 +39,7 @@ const Mutations = {
     const email = args.email.toLowerCase()
     const password = await bcrypt.hash(args.password, 10)
 
-    const user = context.db.mutation.createUser(
+    const user = await context.db.mutation.createUser(
       {
         data: {
           ...args,

@@ -2,16 +2,15 @@ import React, { useState } from 'react'
 import { Mutation } from 'react-apollo'
 import Form from './styles/Form'
 import Error from './ErrorMessage'
-import { SIGNUP_MUTATION } from './graphql/mutations'
+import { SIGNIN_MUTATION } from './graphql/mutations'
 import { CURRENT_USER_QUERY } from './graphql/queries'
 
 const initialState = {
-  name: '',
   email: '',
   password: '',
 }
 
-const Signup = () => {
+const SignIn = () => {
   const [state, setState] = useState(initialState)
   console.log(state)
 
@@ -20,7 +19,7 @@ const Signup = () => {
 
   return (
     <Mutation
-      mutation={SIGNUP_MUTATION}
+      mutation={SIGNIN_MUTATION}
       variables={state}
       refetchQueries={[{ query: CURRENT_USER_QUERY }]}
     >
@@ -34,7 +33,7 @@ const Signup = () => {
           }}
         >
           <fieldset>
-            <h2>Sign up for an account</h2>
+            <h2>Sign in</h2>
             <Error error={error} />
             <label htmlFor="email">
               Email
@@ -43,16 +42,6 @@ const Signup = () => {
                 name="email"
                 placeholder="Email"
                 value={state.email}
-                onChange={onInputChange}
-              />
-            </label>
-            <label htmlFor="name">
-              Name
-              <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                value={state.name}
                 onChange={onInputChange}
               />
             </label>
@@ -67,7 +56,7 @@ const Signup = () => {
               />
             </label>
 
-            <button type="submit">Sign up!</button>
+            <button type="submit">Sign in!</button>
           </fieldset>
         </Form>
       )}
@@ -75,4 +64,4 @@ const Signup = () => {
   )
 }
 
-export default Signup
+export default SignIn

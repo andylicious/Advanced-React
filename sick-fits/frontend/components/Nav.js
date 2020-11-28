@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 import User from './User'
 import StyledNav from './styles/NavStyles'
+import Signout from './Signout'
 
 const Nav = () => (
   <User>
@@ -22,6 +23,7 @@ const Nav = () => (
             <Link href="/account">
               <a>Account</a>
             </Link>
+            <Signout />
           </>
         )}
         {!data?.me && (

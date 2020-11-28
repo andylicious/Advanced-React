@@ -13,7 +13,6 @@ const initialState = {
 
 const Signup = () => {
   const [state, setState] = useState(initialState)
-  console.log(state)
 
   const onInputChange = (e) =>
     setState({ ...state, [e.target.name]: e.target.value })

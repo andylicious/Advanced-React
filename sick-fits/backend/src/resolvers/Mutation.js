@@ -1,5 +1,7 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const { randomBytes } = require('crypto')
+const { promisify } = require('util')
 
 const Mutations = {
   async createItem(parent, args, context, info) {
@@ -86,6 +88,69 @@ const Mutations = {
   async signout(parent, args, ctx, info) {
     ctx.response.clearCookie('token')
     return { message: 'Signed out' }
+  },
+
+  async requestReset(parent, args, ctx, info) {
+    const user = await ctx.db.query.user({ where: { email: args.email } })
+
+    if (!user) {
+      throw new Error(`No such user found for email ${args.email}`)
+    }
+
+    const randomBytesPromisified = promisify(randomBytes)
+    const resetToken = (await randomBytesPromisified(20)).toString('hex')
+    const resetTokenExpiry = Date.now() + 3600000 // 1hr
+    const res = await ctx.db.mutation.updateUser({
+      where: { email: args.email },
+      data: { resetToken, resetTokenExpiry },
+    })
+    console.log('res', { res })
+
+    return { message: 'Thanks!' }
+  },
+
+  async resetPassword(
+    parent,
+    { resetToken, password, confirmPassword },
+    ctx,
+    info
+  ) {
+    if (password !== confirmPassword) {
+      throw new Error('Paswords do not match')
+    }
+
+    const [user] = await ctx.db.query.users({
+      where: { resetToken, resetTokenExpiry_gte: Date.now() - 3600000 },
+    })
+
+    if (!user) {
+      throw new Error('Token expired or invalid')
+    }
+
+    const newPassword = await bcrypt.hash(password, 10)
+
+    const updateUser = await ctx.db.mutation.updateUser(
+      {
+        where: {
+          email: user.email,
+        },
+        data: {
+          password: newPassword,
+          resetToken: null,
+          resetTokenExpiry: null,
+        },
+      },
+      info
+    )
+
+    const token = jwt.sign({ userId: updateUser.id }, process.env.APP_SECRET)
+
+    ctx.response.cookie('token', token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year token
+    })
+
+    return updateUser
   },
 }
 

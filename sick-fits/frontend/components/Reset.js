@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import { Mutation } from 'react-apollo'
 import Form from './styles/Form'
 import Error from './ErrorMessage'
-import { SIGNIN_MUTATION } from './graphql/mutations'
+import { RESET_MUTATION } from './graphql/mutations'
 import { CURRENT_USER_QUERY } from './graphql/queries'
 
 const initialState = {
-  email: '',
+  confirmPassword: '',
   password: '',
 }
 
-const SignIn = () => {
+const Reset = ({ resetToken }) => {
   const [state, setState] = useState(initialState)
 
   const onInputChange = (e) =>
@@ -18,44 +19,43 @@ const SignIn = () => {
 
   return (
     <Mutation
-      mutation={SIGNIN_MUTATION}
-      variables={state}
+      mutation={RESET_MUTATION}
+      variables={{ ...state, resetToken }}
       refetchQueries={[{ query: CURRENT_USER_QUERY }]}
     >
-      {(signup, { error }) => (
+      {(requestReset, { error }) => (
         <Form
           method="post"
           onSubmit={async (e) => {
             e.preventDefault()
-            await signup()
+            await requestReset()
             setState(initialState)
           }}
         >
           <fieldset>
-            <h2>Sign in</h2>
+            <h2>Reset your password</h2>
             <Error error={error} />
-            <label htmlFor="email">
-              Email
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={state.email}
-                onChange={onInputChange}
-              />
-            </label>
             <label htmlFor="password">
               Password
               <input
                 type="password"
                 name="password"
-                placeholder="Password"
+                placeholder="New password"
                 value={state.password}
                 onChange={onInputChange}
               />
             </label>
-
-            <button type="submit">Sign in!</button>
+            <label htmlFor="confirmPassword">
+              Email
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm password"
+                value={state.confirmPassword}
+                onChange={onInputChange}
+              />
+            </label>
+            <button type="submit">Reset your password</button>
           </fieldset>
         </Form>
       )}
@@ -63,4 +63,8 @@ const SignIn = () => {
   )
 }
 
-export default SignIn
+Reset.propTypes = {
+  resetToken: PropTypes.string.isRequired,
+}
+
+export default Reset

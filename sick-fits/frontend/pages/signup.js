@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import RequestReset from '../components/RequestReset'
 import Signup from '../components/Signup'
 import SignIn from '../components/SignIn'
 
@@ -13,6 +14,7 @@ function signup() {
     <Column>
       <Signup />
       <SignIn />
+      <RequestReset />
     </Column>
   )
 }

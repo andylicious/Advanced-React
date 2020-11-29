@@ -2,38 +2,35 @@ import React, { useState } from 'react'
 import { Mutation } from 'react-apollo'
 import Form from './styles/Form'
 import Error from './ErrorMessage'
-import { SIGNIN_MUTATION } from './graphql/mutations'
-import { CURRENT_USER_QUERY } from './graphql/queries'
+import { REQUEST_RESET_MUTATION } from './graphql/mutations'
 
 const initialState = {
   email: '',
-  password: '',
 }
 
-const SignIn = () => {
+const RequestReset = () => {
   const [state, setState] = useState(initialState)
 
   const onInputChange = (e) =>
     setState({ ...state, [e.target.name]: e.target.value })
 
   return (
-    <Mutation
-      mutation={SIGNIN_MUTATION}
-      variables={state}
-      refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-    >
-      {(signup, { error }) => (
+    <Mutation mutation={REQUEST_RESET_MUTATION} variables={state}>
+      {(requestReset, { error, loading, called }) => (
         <Form
           method="post"
           onSubmit={async (e) => {
             e.preventDefault()
-            await signup()
+            await requestReset()
             setState(initialState)
           }}
         >
           <fieldset>
-            <h2>Sign in</h2>
+            <h2>Request a password reset</h2>
             <Error error={error} />
+            {!error && !loading && called && (
+              <p>Success! Check your email for a reset link.</p>
+            )}
             <label htmlFor="email">
               Email
               <input
@@ -44,18 +41,7 @@ const SignIn = () => {
                 onChange={onInputChange}
               />
             </label>
-            <label htmlFor="password">
-              Password
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                value={state.password}
-                onChange={onInputChange}
-              />
-            </label>
-
-            <button type="submit">Sign in!</button>
+            <button type="submit">Request reset</button>
           </fieldset>
         </Form>
       )}
@@ -63,4 +49,4 @@ const SignIn = () => {
   )
 }
 
-export default SignIn
+export default RequestReset

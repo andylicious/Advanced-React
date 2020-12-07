@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { Query } from 'react-apollo'
+import { Query, Mutation } from 'react-apollo'
 import PropTypes from 'prop-types'
 import { ALL_USERS_QUERY } from './graphql/queries'
 
 import Error from './ErrorMessage'
 import SickButton from './styles/SickButton'
 import Table from './styles/Table'
+import { UPDATE_PERMISSIONS_MUTATION } from './graphql/mutations'
 
 const possiblePermissions = [
   'ADMIN',
@@ -65,25 +66,42 @@ const User = ({ user }) => {
   }
 
   return (
-    <tr>
-      <td>{name}</td>
-      <td>{email}</td>
-      {possiblePermissions.map((permission) => (
-        <td key={permission}>
-          <label htmlFor={`${id}-permission-${permission}`}>
-            <input
-              type="checkbox"
-              checked={userPermissions.includes(permission)}
-              value={permission}
-              onChange={handlePermissionChange}
-            />
-          </label>
-        </td>
-      ))}
-      <td>
-        <SickButton>Update</SickButton>
-      </td>
-    </tr>
+    <Mutation
+      mutation={UPDATE_PERMISSIONS_MUTATION}
+      variables={{ permissions: userPermissions, userId: id }}
+    >
+      {(updatePermissions, { loading, error }) => (
+        <>
+          {error && <Error error={error} />}
+          <tr>
+            <td>{name}</td>
+            <td>{email}</td>
+            {possiblePermissions.map((permission) => (
+              <td key={permission}>
+                <label htmlFor={`${id}-permission-${permission}`}>
+                  <input
+                    id={`${id}-permission-${permission}`}
+                    type="checkbox"
+                    checked={userPermissions.includes(permission)}
+                    value={permission}
+                    onChange={handlePermissionChange}
+                  />
+                </label>
+              </td>
+            ))}
+            <td>
+              <SickButton
+                type="button"
+                disabled={loading}
+                onClick={updatePermissions}
+              >
+                Updat{loading ? 'ing' : 'e'}
+              </SickButton>
+            </td>
+          </tr>
+        </>
+      )}
+    </Mutation>
   )
 }
 

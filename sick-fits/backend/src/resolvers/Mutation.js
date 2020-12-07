@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { randomBytes } = require('crypto')
 const { promisify } = require('util')
+const { hasPermission } = require('../utils')
 const { createEmail, transport } = require('../mail')
 
 const Mutations = {
@@ -35,8 +36,19 @@ const Mutations = {
   async deleteItem(parent, args, context, info) {
     const where = { id: args.id }
     // 1. Find item
-    const item = await context.db.query.item({ where }, `{ id title }`)
+    const item = await context.db.query.item(
+      { where },
+      `{ id title user { id } }`
+    )
     // 2. Check if they own and have permissions
+    const ownsItem = item.user.id === ctx.request.userId
+    const hasDeletePermissions = ctx.request.user.persmissions.some(
+      (permission) => ['ADMIN', 'ITEMDELETE'].includes(permission)
+    )
+
+    if (!ownsItem && !hasDeletePermissions) {
+      throw new Error('You do not have permission to delete this item.')
+    }
     // 3. Delete it
     return context.db.mutation.deleteItem({ where }, info)
   },
@@ -162,6 +174,28 @@ const Mutations = {
     })
 
     return updateUser
+  },
+
+  async updatePermissions(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error('Must be logged in!')
+    }
+
+    const currentUser = await ctx.db.query.user(
+      { where: { id: ctx.request.userId } },
+      info
+    )
+
+    hasPermission(currentUser, ['ADMIN', 'PERMISSIONUPDATE'])
+    console.log({ permissions: args.permissions })
+
+    return ctx.db.mutation.updateUser(
+      {
+        data: { permissions: { set: args.permissions } },
+        where: { id: args.id },
+      },
+      info
+    )
   },
 }
 

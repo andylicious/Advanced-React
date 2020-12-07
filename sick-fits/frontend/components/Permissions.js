@@ -1,5 +1,5 @@
+import React, { useState } from 'react'
 import { Query } from 'react-apollo'
-import React from 'react'
 import PropTypes from 'prop-types'
 import { ALL_USERS_QUERY } from './graphql/queries'
 
@@ -45,28 +45,54 @@ const Permissions = () => (
   </Query>
 )
 
-const User = ({ user }) => (
-  <tr>
-    <td>{user.name}</td>
-    <td>{user.email}</td>
-    {possiblePermissions.map((permission) => (
-      <td key={permission}>
-        <label htmlFor={`${user.id}-permission-${permission}`}>
-          <input type="checkbox" />
-        </label>
+const User = ({ user }) => {
+  const { name, email, id, permissions } = user
+  const [userPermissions, setUserPermissions] = useState(permissions)
+
+  const handlePermissionChange = (e) => {
+    const checkbox = e.target
+    const newPermissions = [...userPermissions]
+
+    if (checkbox.checked) {
+      newPermissions.push(checkbox.value)
+      setUserPermissions(newPermissions)
+    } else {
+      const removePermissions = newPermissions.filter(
+        (permission) => permission !== checkbox.value
+      )
+      setUserPermissions(removePermissions)
+    }
+  }
+
+  return (
+    <tr>
+      <td>{name}</td>
+      <td>{email}</td>
+      {possiblePermissions.map((permission) => (
+        <td key={permission}>
+          <label htmlFor={`${id}-permission-${permission}`}>
+            <input
+              type="checkbox"
+              checked={userPermissions.includes(permission)}
+              value={permission}
+              onChange={handlePermissionChange}
+            />
+          </label>
+        </td>
+      ))}
+      <td>
+        <SickButton>Update</SickButton>
       </td>
-    ))}
-    <td>
-      <SickButton>Update</SickButton>
-    </td>
-  </tr>
-)
+    </tr>
+  )
+}
 
 User.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string,
     email: PropTypes.string,
+    permissions: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
 }
 

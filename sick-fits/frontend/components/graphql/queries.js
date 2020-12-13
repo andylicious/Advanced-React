@@ -69,3 +69,9 @@ export const ALL_USERS_QUERY = gql`
     }
   }
 `
+
+export const LOCAL_STATE_QUERY = gql`
+  query {
+    cartOpen @client
+  }
+`

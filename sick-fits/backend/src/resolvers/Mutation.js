@@ -4,16 +4,17 @@ const { randomBytes } = require('crypto')
 const { promisify } = require('util')
 const { hasPermission } = require('../utils')
 const { createEmail, transport } = require('../mail')
+const { connect } = require('net')
 
 const Mutations = {
   async createItem(parent, args, context, info) {
-    if (!ctx.req.userId) {
+    if (!context.request.userId) {
       throw new Error('You need to be logged in to do that')
     }
 
     const item = await context.db.mutation.createItem(
       {
-        data: { ...args, user: { connect: { id: ctx.req.userId } } },
+        data: { ...args, user: { connect: { id: context.request.userId } } },
       },
       info
     )
@@ -193,6 +194,41 @@ const Mutations = {
       {
         data: { permissions: { set: args.permissions } },
         where: { id: args.id },
+      },
+      info
+    )
+  },
+
+  async addToCart(parent, args, ctx, info) {
+    const { userId } = ctx.request
+    if (!userId) {
+      throw new Error('Must be logged in!')
+    }
+
+    const [existingCartItem] = await ctx.db.query.cartItems(
+      {
+        where: {
+          user: { id: userId },
+          item: { id: args.id },
+        },
+      },
+      info
+    )
+
+    if (existingCartItem) {
+      console.log('Item already in cart')
+      return ctx.db.mutation.updateCartItem({
+        where: { id: existingCartItem.id },
+        data: { quantity: existingCartItem.quantity + 1 },
+      })
+    }
+
+    return ctx.db.mutation.createCartItem(
+      {
+        data: {
+          user: { connect: { id: userId } },
+          item: { connect: { id: args.id } },
+        },
       },
       info
     )

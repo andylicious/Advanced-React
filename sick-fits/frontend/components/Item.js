@@ -2,11 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 
+import AddToCart from './AddToCart'
+import DeleteItem from './DeleteItem'
 import formatMoney from '../lib/formatMoney'
 import ItemStyles from './styles/ItemStyles'
-import Title from './styles/Title'
 import PriceTag from './styles/PriceTag'
-import DeleteItem from './DeleteItem'
+import Title from './styles/Title'
 
 const Item = ({ item }) => (
   <ItemStyles>
@@ -33,7 +34,7 @@ const Item = ({ item }) => (
       >
         <a>Edit 🖋</a>
       </Link>
-      <button>Add to cart</button>
+      <AddToCart id={item.id} />
       <DeleteItem id={item.id}>Delete</DeleteItem>
     </div>
   </ItemStyles>

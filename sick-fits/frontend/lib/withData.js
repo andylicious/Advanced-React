@@ -20,7 +20,6 @@ function createClient({ headers }) {
         Mutation: {
           toggleCart(_, variables, { cache }) {
             // read cartOpen value
-            console.log('called')
             const { cartOpen } = cache.readQuery({ query: LOCAL_STATE_QUERY })
 
             const data = { data: { cartOpen: !cartOpen } }

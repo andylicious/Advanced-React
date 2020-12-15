@@ -233,6 +233,35 @@ const Mutations = {
       info
     )
   },
+
+  async removeFromCart(parent, args, ctx, info) {
+    const { userId } = ctx.request
+    if (!userId) {
+      throw new Error('Must be logged in!')
+    }
+
+    const cartItem = await ctx.db.query.cartItem(
+      {
+        where: { id: args.id },
+      },
+      `{ id, user { id } }`
+    )
+
+    if (!cartItem) {
+      throw new Error('No item found.')
+    }
+
+    if (cartItem.user.id !== userId) {
+      throw new Error('Item not owned by user.')
+    }
+
+    return ctx.db.mutation.deleteCartItem(
+      {
+        where: { id: args.id },
+      },
+      info
+    )
+  },
 }
 
 module.exports = Mutations

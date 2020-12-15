@@ -2,6 +2,8 @@ import React from 'react'
 import Link from 'next/link'
 import { Mutation } from 'react-apollo'
 
+import CartCount from './CartCount'
+import calculateCartItemCount from '../lib/calculateCartItemCount'
 import User from './User'
 import StyledNav from './styles/NavStyles'
 import Signout from './Signout'
@@ -28,7 +30,10 @@ const Nav = () => (
                   <a>Account</a>
                 </Link>
                 <Signout />
-                <button onClick={toggleCart}>My cart</button>
+                <button onClick={toggleCart}>
+                  My cart
+                  <CartCount count={calculateCartItemCount(data.me.cart)} />
+                </button>
               </>
             )}
             {!data?.me && (

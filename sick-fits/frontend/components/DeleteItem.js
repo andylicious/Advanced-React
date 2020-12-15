@@ -18,7 +18,6 @@ const DeleteItem = ({ children, id }) => {
     const filteredItems = data.items.filter(
       (item) => item.id !== payload.data.deleteItem.id
     )
-    console.log('data', { data })
 
     cache.writeQuery({
       query: GET_ALL_ITEMS_QUERY,

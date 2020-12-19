@@ -10,6 +10,7 @@ import formatMoney from '../lib/formatMoney'
 import SickButton from './styles/SickButton'
 import Supreme from './styles/Supreme'
 import User from './User'
+import TakeMyMoney from './TakeMyMoney'
 import { LOCAL_STATE_QUERY } from './graphql/queries'
 import { TOGGLE_CART_MUTATION } from './graphql/mutations'
 
@@ -52,7 +53,9 @@ const Cart = () => (
           </ul>
           <footer>
             <p>{formatMoney(calcTotalPrice(me.cart))}$</p>
-            <SickButton>Checkout</SickButton>
+            <TakeMyMoney>
+              <SickButton>Checkout</SickButton>
+            </TakeMyMoney>
           </footer>
         </CartStyles>
       )

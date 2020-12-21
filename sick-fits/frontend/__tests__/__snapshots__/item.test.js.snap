@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Item /> renders and matches snapshot 1`] = `
+<ForwardRef(ItemStyles__Item)>
+  <img
+    alt="A pair of shoes"
+    src="dog.jpg"
+  />
+  <ForwardRef(Title)>
+    <Link
+      href={
+        Object {
+          "pathname": "/item",
+          "query": Object {
+            "id": "12345abcdef",
+          },
+        }
+      }
+    >
+      <a>
+        A pair of shoes
+      </a>
+    </Link>
+  </ForwardRef(Title)>
+  <ForwardRef(PriceTag)>
+    $500
+  </ForwardRef(PriceTag)>
+  <p>
+    wear them on feet
+  </p>
+  <div
+    className="buttonList"
+  >
+    <Link
+      href={
+        Object {
+          "pathname": "/update",
+          "query": Object {
+            "id": "12345abcdef",
+          },
+        }
+      }
+    >
+      <a>
+        Edit 🖋
+      </a>
+    </Link>
+    <AddToCart
+      id="12345abcdef"
+    />
+    <DeleteItem
+      id="12345abcdef"
+    >
+      Delete
+    </DeleteItem>
+  </div>
+</ForwardRef(ItemStyles__Item)>
+`;
